@@ -1,7 +1,4 @@
-from wagtail_modeladmin.options import (
-    ModelAdmin,
-    modeladmin_register
-)
+from wagtail_modeladmin.options import ModelAdmin, modeladmin_register
 
 try:
     from wagtail import hooks
@@ -9,8 +6,9 @@ except ImportError:
     from wagtail.core import hooks
 
 from wagtail.admin.site_summary import SummaryItem
-from wagtailsvg.views import SvgChooserViewSet
+
 from wagtailsvg.models import Svg
+from wagtailsvg.views import SvgChooserViewSet
 
 
 class SvgSummaryItem(SummaryItem):
@@ -28,21 +26,21 @@ def add_svg_summary_item(request, items):
     items.append(SvgSummaryItem(request))
 
 
-@hooks.register('register_admin_viewset')
+@hooks.register("register_admin_viewset")
 def register_site_chooser_viewset():
-    return SvgChooserViewSet('svg_chooser', url_prefix='svg-chooser')
+    return SvgChooserViewSet("svg_chooser", url_prefix="svg-chooser")
 
 
 class SvgModelAdmin(ModelAdmin):
     model = Svg
-    menu_label = 'Svg'
-    menu_icon = 'image'
+    menu_label = "Svg"
+    menu_icon = "image"
     menu_order = 400
     add_to_settings_menu = False
     exclude_from_explorer = False
-    list_display = ('title',)
-    list_filter = ('collection__name',)
-    search_fields = ('title',)
+    list_display = ("title",)
+    list_filter = ("collection__name",)
+    search_fields = ("title",)
 
 
 modeladmin_register(SvgModelAdmin)

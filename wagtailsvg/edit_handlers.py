@@ -1,20 +1,17 @@
-try:
-    from wagtail.admin.panels import FieldPanel
-    from wagtailsvg.widgets import AdminSvgChooser
+from wagtail.admin.panels import FieldPanel
 
-    class SvgChooserPanel(FieldPanel):
-        def __init__(self, field_name, disable_comments=None, permission=None, **kwargs):
-            super().__init__(field_name, **kwargs)
-            self.widget = AdminSvgChooser
-            self.disable_comments = disable_comments
-            self.permission = permission
+from wagtailsvg.widgets import AdminSvgChooser
 
-except ImportError:
-    from wagtail.admin.edit_handlers import BaseChooserPanel
 
-    class SvgChooserPanel(BaseChooserPanel):
-        object_type_name = "svg"
+class SvgChooserPanel(FieldPanel):
+    """
+    Correct Panel for Wagtail 7.0+.
+    We leverage the 'base_form_class_attrs' property of FieldPanel
+    to pass the widget override directly to the form class.
+    """
 
-        def widget_overrides(self):
-            from wagtailsvg.widgets import AdminSvgChooser
-            return {self.field_name: AdminSvgChooser}
+    @property
+    def base_form_class_attrs(self):
+        return {"widgets": {self.field_name: AdminSvgChooser}}
+
+    pass
